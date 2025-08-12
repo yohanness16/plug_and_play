@@ -1,12 +1,12 @@
 
 import { Hono } from 'hono'
 import { z } from 'zod'
-import { db } from '../db/client'
-import { blogReactions, blogPosts, blogComments } from '../db/schema'
-import { requireAuth } from '../middleware/requireAuth'
+import { db } from '../db/client.js'
+import { blogReactions, blogPosts, blogComments } from '../db/schema.js'
+import { requireAuth } from '../middleware/requireAuth.js'
 import { eq , and } from 'drizzle-orm'
 import { randomUUID } from 'crypto'
-import type { HonoVariables } from '../utils/types'; 
+import type { HonoVariables } from '../utils/types.js'; 
 
 
 const reactions = new Hono<{ Variables: HonoVariables }>()

@@ -1,9 +1,9 @@
 
 import { Hono } from 'hono';
 import { z } from 'zod'
-import { db } from '../db/client'
-import { blogComments, blogPosts, users } from '../db/schema'
-import { requireAuth } from '../middleware/requireAuth'
+import { db } from '../db/client.js'
+import { blogComments, blogPosts, users } from '../db/schema.js'
+import { requireAuth } from '../middleware/requireAuth.js'
 import { eq, asc } from 'drizzle-orm'
 import { randomUUID } from 'crypto'
 
@@ -13,7 +13,7 @@ const comments = new Hono()
 const createCommentSchema = z.object({
   postId: z.string().uuid(),
   content: z.string().min(1),
-  parentId: z.string().uuid().optional(), // if present -> reply
+  parentId: z.string().uuid().optional(), 
 })
 
 const editCommentSchema = z.object({

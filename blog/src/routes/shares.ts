@@ -1,8 +1,8 @@
 
 import { Hono } from 'hono'
 import { z } from 'zod'
-import { db } from '../db/client'               
-import { blogPosts, blogShares } from '../db/schema'
+import { db } from '../db/client.js'               
+import { blogPosts, blogShares } from '../db/schema.js'
 import { createClient } from '@supabase/supabase-js'
 import { eq } from 'drizzle-orm'
 import { randomUUID } from 'crypto'

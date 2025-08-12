@@ -1,8 +1,8 @@
 import { Hono } from 'hono';
 import { z } from 'zod';
-import { supabase, db } from '../db/client';
-import { users } from '../db/schema';
-import { logger } from '../middleware/logger';
+import { supabase, db } from '../db/client.js';
+import { users } from '../db/schema.js';
+import { logger } from '../middleware/logger.js';
 import { pgRole, PgRole } from 'drizzle-orm/pg-core';
 export const app = new Hono();
 

@@ -1,11 +1,12 @@
 {
   "name": "blog",
-  "scripts": {
-    "dev:bun": "bun run --watch src/app.ts",
-    "dev:node": "tsx watch src/app.ts --exclude node_modules",
-    "build": "bun build src/app.ts --target node --outdir dist",
-    "start": "node dist/app.js"
-  },
+"scripts": {
+  "dev:bun": "bun run --watch src/app.ts",
+  "dev:node": "tsx watch dist/app.js",
+  "build": "tsc -p tsconfig.node.json",
+  "start": "node dist/app.js"
+}
+,
   "dependencies": {
     "@hono/node-server": "^1.18.1",
     "@hono/swagger-ui": "^0.5.2",

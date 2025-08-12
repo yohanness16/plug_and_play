@@ -1,11 +1,11 @@
 import { Hono } from 'hono';
 import { z } from 'zod';
-import { db } from '../db/client';
-import { blogCategories, blogPosts, blogPostCategories, users } from '../db/schema';
-import { requireAuth } from '../middleware/requireAuth';
+import { db } from '../db/client.js';
+import { blogCategories, blogPosts, blogPostCategories, users } from '../db/schema.js';
+import { requireAuth } from '../middleware/requireAuth.js';
 import { eq, sql, desc, inArray } from 'drizzle-orm';
 import { randomUUID } from 'crypto';
-import { slugify } from '../utils/slugify';
+import { slugify } from '../utils/slugify.js';
 
 const categories = new Hono();
 

@@ -1,22 +1,15 @@
 import { Hono } from 'hono';
-import {app} from './auth.js';
-import posts from './posts.js'
+import { app } from './auth.js';
+import posts from './posts.js';
 import categories from './categories.js';
 import comments from './comments.js';
 import reactions from './reactions.js';
 import share from './shares.js';
-
 const appRouter = new Hono();
-
 appRouter.route('/auth', app);
-appRouter.route('/posts', posts)
-appRouter.route('/catagories', categories)
-appRouter.route('/comments', comments)
-appRouter.route('/', reactions)
-appRouter.route('/share', share)
-
-
-
-
-
+appRouter.route('/posts', posts);
+appRouter.route('/catagories', categories);
+appRouter.route('/comments', comments);
+appRouter.route('/', reactions);
+appRouter.route('/share', share);
 export { appRouter };

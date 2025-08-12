@@ -1,19 +1,19 @@
 
 import { Hono } from 'hono'
 import { z } from 'zod'
-import { db } from '../db/client' 
+import { db } from '../db/client.js' 
 import {
   blogPosts,
   blogPostCategories,
   blogCategories,
   users,
   postViews, 
-} from '../db/schema';
-import { requireAuth } from '../middleware/requireAuth'
+} from '../db/schema.js';
+import { requireAuth } from '../middleware/requireAuth.js'
 import { eq, sql, and, desc, inArray } from 'drizzle-orm';
 import { randomUUID } from 'crypto'
-import { slugify } from '../utils/slugify'
-import type { HonoVariables } from '../utils/types'; 
+import { slugify } from '../utils/slugify.js'
+import type { HonoVariables } from '../utils/types.js'; 
 
 
 

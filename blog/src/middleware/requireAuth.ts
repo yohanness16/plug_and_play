@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
 import type { Context } from 'hono'
-import type { HonoVariables } from '../utils/types'; 
+import type { HonoVariables } from '../utils/types.js'; 
 
 export const requireAuth = async (c: Context<{ Variables: HonoVariables }>, next: () => Promise<void>) => {
   
