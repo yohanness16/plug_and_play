@@ -192,7 +192,7 @@ POST /comments/:commentId/reactions
 Body: { "type": "like" | "dislike" }
 ```
 **Get reaction**
-``http
+```http
 GET /posts/:postId/reactions
 GET /comments/:commentId/reactions
 ```
