@@ -5,7 +5,7 @@ import { users } from '../db/schema.js';
 import { logger } from '../middleware/logger.js';
 export const app = new Hono();
 const signupSchema = z.object({
-    email: z.email(),
+    email: z.string().email(),
     password: z.string().min(6),
     name: z.string().min(1),
     role: z.enum(['admin', 'user']).default('user')
@@ -44,7 +44,7 @@ app.post('/signup', async (c) => {
     }
 });
 const loginSchema = z.object({
-    email: z.email(),
+    email: z.string().email(),
     password: z.string().min(6)
 });
 app.post('/login', async (c) => {
@@ -78,7 +78,7 @@ app.post('/login', async (c) => {
     }
 });
 const forgotPasswordSchema = z.object({
-    email: z.email()
+    email: z.string().email()
 });
 app.post('/forgot-password', async (c) => {
     try {
