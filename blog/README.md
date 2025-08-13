@@ -6,23 +6,24 @@ A fully functional blog API using **Hono**, **Drizzle ORM**, **Supabase**, and *
 
 ## Table of Contents
 
-- [Requirements](#requirements)
-- [Installation](#installation)
-- [Environment Variables](#environment-variables)
-- [Database Setup & Migrations](#database-setup--migrations)
-- [Scripts](#scripts)
-- [Running the Server](#running-the-server)
-- [API Endpoints](#api-endpoints)
-- [Frontend Integration](#frontend-integration)
+- [Requirements](#requirements)  
+- [Installation](#installation)  
+- [Environment Variables](#environment-variables)  
+- [Database Setup & Migrations](#database-setup--migrations)  
+- [Scripts](#scripts)  
+- [Running the Server](#running-the-server)  
+- [API Endpoints](#api-endpoints)  
+- [Frontend Integration](#frontend-integration)  
+- [Notes](#notes)  
 
 ---
 
 ## Requirements
 
-- Node.js >= 20 or Bun >= 1.x
-- PostgreSQL (Supabase or local)
-- npm or bun
-- `npx` for Drizzle CLI
+- Node.js >= 20 or Bun >= 1.x  
+- PostgreSQL (Supabase or local)  
+- npm, yarn, pnpm, or Bun  
+- `npx` for Drizzle CLI  
 
 ---
 
@@ -34,22 +35,24 @@ A fully functional blog API using **Hono**, **Drizzle ORM**, **Supabase**, and *
 git clone <your-repo-url>
 cd <your-repo-folder>
 
-Install dependencies:
+```
+### 2.Install dependencies:
 
-Node (npm/yarn/pnpm):
-
-
+```bash
+# Node (npm/yarn/pnpm)
 npm install
 # or
 yarn
 # or
 pnpm install
-# or 
+# Bun
 bun install
 
+```
 Environment Variables
-Create a .env file in the root of the project:
- 
+Create a .env file in the root:
+
+```bash
 # PostgreSQL database connection
 DATABASE_URL=postgresql://<DB_USER>:<DB_PASSWORD>@<DB_HOST>:<DB_PORT>/<DB_NAME>?pgbouncer=true
 
@@ -60,90 +63,85 @@ SUPABASE_SERVICE_ROLE_KEY=<your-service-role-key>
 # Optional: App URL for sharing links
 APP_URL=http://localhost:3000
 
-Do not commit your .env file to source control.
-
+``` 
 Database Setup & Migrations
-Generate migration files using Drizzle CLI:
-
-bash
-Copy
-Edit
+## 1.Generate migration files:
+```bash
 npx drizzle-kit generate
-Run migrations:
-
-bash
-Copy
-Edit
+```
+## 2.Run migrations:
+```bash
 npx drizzle-kit migrate
-This will create all tables for:
+```
 
-blog_posts
+This project will create the following tables:
 
-blog_categories
+- `blog_posts`
+- `blog_categories`
+- `blog_post_categories`
+- `blog_comments`
+- `blog_reactions`
+- `blog_shares`
+- `users` (managed via Supabase)
 
-blog_post_categories
+## Scripts
 
-blog_comments
+| Command                     | Description                                          |
+|-----------------------------|------------------------------------------------------|
+| `bun run --watch src/app.ts` | Run development server with Bun (hot reload)       |
+| `npm run dev:node`           | Run development server with Node/tsx (watch dist/app.js) |
+| `npm run build`              | Build production files with TypeScript (`tsc`)     |
+| `npm start`                  | Start production server (Node)                     |
 
-blog_reactions
 
-blog_shares
 
-users (managed via Supabase)
+## Running the Server
 
-Scripts
-Command	Description
-bun run --watch src/app.ts	Run development server with Bun (hot reload)
-npm run dev:node	Run development server with Node/tsx (watch dist/app.js)
-npm run build	Build production files with tsc
-npm start	Start production server (Node)
+### Using Bun
+To run the development server with hot reload using Bun:
 
-Running the Server
-Bun:
-
-bash
-Copy
-Edit
+```bash
 bun run --watch src/app.ts
-Node:
 
-Build:
+```
+Using Node
+1. Build the project:
 
-bash
-Copy
-Edit
+```bash
 npm run build
-Run:
 
-bash
-Copy
-Edit
-npm start
-Dev watch mode (Node):
+```
+2. Run the production server:
+ ```bash
+ npm start
 
-bash
-Copy
-Edit
+```
+3. Run the development server with watch mode:
+```bash
 npm run dev:node
-API Endpoints
-Auth
-bash
-Copy
-Edit
-POST /auth/signup
-POST /auth/login
-GET /auth/me
-Auth handled via Supabase JWT. Include Authorization: Bearer <token> in headers for protected routes.
+
+```
+## API Endpoints
+
+### Auth (via Supabase JWT)
+
+| Method | Endpoint       | Description                       |
+|--------|----------------|-----------------------------------|
+| POST   | `/auth/signup` | Sign up a new user                |
+| POST   | `/auth/login`  | Log in an existing user           |
+| GET    | `/auth/me`     | Get the current authenticated user|
+
+> **Note:** Include `Authorization: Bearer <token>` in headers for protected routes.
 
 Posts
 Create Post (Admin/Author)
+
+```bash
 POST /posts
 
-Body example:
-
-json
-Copy
-Edit
+```
+Body Example:
+```bash
 {
   "title": "My First Post",
   "content": "This is the content of the post.",
@@ -152,66 +150,76 @@ Edit
   "categories": ["category-uuid-1", "category-uuid-2"],
   "status": "draft"
 }
-List Posts
-GET /posts?page=1&limit=10&q=search&status=published&authorId=<uuid>&categoryId=<uuid>
 
-Get Single Post
-GET /posts/:slug
+```
+## Other Post Routes
 
-Update Post
-PUT /posts/:id
-Body is same as create but optional fields.
+| Method | Endpoint                                                                                     | Description                              |
+|--------|---------------------------------------------------------------------------------------------|------------------------------------------|
+| GET    | `/posts?page=1&limit=10&q=search&status=published&authorId=<uuid>&categoryId=<uuid>`       | List posts with optional filters         |
+| GET    | `/posts/:slug`                                                                               | Get a single post by slug                |
+| PUT    | `/posts/:id`                                                                                 | Update a post by ID                       |
+| DELETE | `/posts/:id?hard=true`                                                                       | Delete a post (soft delete by default; `hard=true` for permanent) |
 
-Delete Post
-DELETE /posts/:id?hard=true
-hard=true → permanent delete (admin only)
-Default → soft delete (archived)
+## Categories
 
-Categories
-GET /catagories
-POST /catagories (admin)
-PUT /catagories/:id (admin)
-DELETE /catagories/:id (admin)
+| Method | Endpoint                | Description               |
+|--------|------------------------|---------------------------|
+| GET    | `/catagories`           | List all categories       |
+| POST   | `/catagories`           | Create a category (admin) |
+| PUT    | `/catagories/:id`       | Update a category (admin) |
+| DELETE | `/catagories/:id`       | Delete a category (admin) |
 
-Comments
-POST /comments
-GET /comments?postId=<postId>
-PUT /comments/:id
-DELETE /comments/:id
+## Comments
 
-Reactions
-Post Reaction
+| Method | Endpoint                      | Description                     |
+|--------|--------------------------------|---------------------------------|
+| POST   | `/comments`                    | Create a comment                |
+| GET    | `/comments?postId=<postId>`   | List comments for a post        |
+| PUT    | `/comments/:id`               | Update a comment                |
+| DELETE | `/comments/:id`               | Delete a comment                |
+
+## Reactions
+
+**Post Reaction:**  
+```http
 POST /posts/:postId/reactions
 Body: { "type": "like" | "dislike" }
-
-Comment Reaction
+```
+**Comment Reaction**
+```http
 POST /comments/:commentId/reactions
 Body: { "type": "like" | "dislike" }
-
-Get Reactions
+```
+**Get reaction**
+``http
 GET /posts/:postId/reactions
 GET /comments/:commentId/reactions
+```
+## Share API
 
-Share
-Create Share
-POST /share/:id/share
-Body:
+### Create a Share
 
-json
-Copy
-Edit
+**Endpoint:** `POST /share/:id/share`  
+
+**Description:** Create a new share for a specific post or item by its ID.
+
+**URL Parameters:**
+
+| Parameter | Type   | Description               |
+|-----------|--------|---------------------------|
+| `id`      | string | The ID of the post/item to share |
+
+**Request Body:**  
+```json
 {
   "platform": "facebook" | "twitter" | "linkedin" | "whatsapp" | "copy_link"
 }
-Get Share Counts
-GET /share/:id/shares
+```
 
-Frontend Integration
-Include Authorization Header for authenticated routes:
-
-js
-Copy
-Edit
+## Frontend Integration
+Authorization Header Example:
+```js
 fetch('/posts', {
   method: 'POST',
   headers: {
@@ -220,18 +228,15 @@ fetch('/posts', {
   },
   body: JSON.stringify(postData)
 });
-Fetch posts:
+```
 
-js
-Copy
-Edit
+fetche posts:
+```js
 const res = await fetch('/posts?page=1&limit=10');
 const data = await res.json();
-Reactions & Shares:
-
-js
-Copy
-Edit
+```
+Reaction and shares:
+```js
 // Reaction
 await fetch(`/posts/${postId}/reactions`, {
   method: 'POST',
@@ -244,20 +249,17 @@ await fetch(`/share/${postId}/share`, {
   method: 'POST',
   body: JSON.stringify({ platform: 'twitter' })
 });
-Notes
-Slugs are automatically generated from titles if not provided.
+```
 
-Soft deletes archive posts (status: archived) instead of removing them.
+## Notes
 
-views are automatically incremented on post fetch.
+- Slugs are automatically generated from titles if not provided.
+- Soft deletes archive posts (`status: archived`) instead of removing them.
+- Views are automatically incremented on post fetch.
+- Categories, reactions, comments, and shares are relational and handled via Drizzle ORM.
 
-Categories, reactions, comments, and shares are relational and handled via drizzle-orm.
+✅ Clone, set your `.env`, run migrations, and start the server. Your full-featured blog API is ready for integration.
 
-✅ You're ready to go!
-Clone, set your .env, run migrations, and start the server. Your full-featured blog API is now ready for integration.
-
-Copy
-Edit
 
 
 
